@@ -4,6 +4,13 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace pab{
+  template <typename T> struct Node;
+  template <typename T> class Queue;
+}
+
+template <typename T> std::ostream &operator<<(std::ostream& out, const pab::Queue<T>& p);
+
 namespace pab {
   
   template <typename T>
@@ -29,21 +36,9 @@ namespace pab {
     T& back(void) const;
     bool empty(void) const;
     int size(void) const;
-    friend std::ostream& operator<< (std::ostream& out, const Queue<T>& p)
-    {
-      if (p.empty())
-	out << "[]";
-      out << "[";
-      for (Node<T>* node = p._front; node != nullptr; node = node->n)
-	out << node->e << ", ";
-      out << "\033[2D]";
-      return out;
-    }
+    friend std::ostream& ::operator<< <T> (std::ostream& out, const Queue<T>& p);
   };
 }
-
-template <typename T>
-std::ostream &operator<< (std::ostream& out, const pab::Queue<T>& p);
 
 template <typename T>
 pab::Queue<T>::Queue()
@@ -124,6 +119,18 @@ template <typename T>
 int pab::Queue<T>::size(void) const
 {
   return _size;
+}
+
+template <typename T>
+std::ostream &operator<< (std::ostream& out, const pab::Queue<T>& p)
+{
+  if (p.empty())
+    out << "[]";
+  out << "[";
+  for (pab::Node<T>* node = p._front; node != nullptr; node = node->n)
+    out << node->e << ", ";
+  out << "\033[2D]";
+  return out;
 }
 
 #endif //QUEUE_H
