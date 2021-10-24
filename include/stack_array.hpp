@@ -18,7 +18,6 @@ namespace pab {
   class Stack {
   private:
     T* _stack;
-    int _top;
     int _size;
     int _capacity;
     
@@ -54,7 +53,6 @@ template <typename T>
 void pab::Stack<T>::empty_stack(void)
 {
   _stack = new T[INIT_CAP];
-  _top = 0;
   _size = 0;
   _capacity = INIT_CAP;
 }
@@ -63,19 +61,18 @@ template <typename T>
 void pab::Stack<T>::push(const T& e)
 {
   if (!full()) {
-    _stack[(_top + _size) % _capacity] = e;
+    _stack[_size] = e;
     _size++;
   }
   else {
      T* nueva_pila = new T[_capacity*2];
      for (int i = 0; i < _capacity; i++) {
-       nueva_pila[i] = _stack[(_top + i) % _capacity];
+       nueva_pila[i] = _stack[i];
      }
      delete[] _stack;
      _stack = nueva_pila;
 
      _stack[_size] = e;
-     _top = 0;
      _size++;
      _capacity*=2;
   }
@@ -87,11 +84,6 @@ void pab::Stack<T>::pop(void)
   if(empty())
     throw std::invalid_argument("pop() is undefined for an empty stack.");
 
-  if (_top < _capacity - 1)
-    _top++;
-  else
-    _top = 0;
-  
   _size--;
 }
 
@@ -101,7 +93,7 @@ T& pab::Stack<T>::top(void) const
   if (empty())
     throw std::invalid_argument("top() is undefined for an empty stack.");
 
-  return _stack[_top];
+  return _stack[_size - 1];
 }
 
 template <typename T>
@@ -128,8 +120,8 @@ std::ostream& operator<< (std::ostream& out, const pab::Stack<T>& p)
   if (p.empty())
     out << "[]";
   out << "[";
-  for (int i = p._top; i < p._top + p._size; i++)
-    out << p._stack[i%p._capacity] << ", ";
+  for (int i = 0; i < p._size; i++)
+    out << p._stack[i] << ", ";
   out << "\033[2D]";
   return out;
 }
