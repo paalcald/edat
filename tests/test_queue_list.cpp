@@ -1,22 +1,57 @@
+#define CATCH_CONFIG_MAIN
+
 #include <iostream>
 #include "queue_list.hpp"
+#include "catch.hpp"
 
 using namespace pab;
 
-int main()
+TEST_CASE(" ")
 {
+  std::cout << "Testing linked list base Queue implementation.\n";
+}
+
+TEST_CASE("testing empty queue.")
+{
+  Queue<int> s;
+}
+
+TEST_CASE("testing push method.")
+{
+  int n = 100;
   Queue<int> p1;
-  p1.push(4);
-  p1.push(5);
-  p1.push(6);
-  p1.pop();
-  p1.push(7);
-  p1.push(8);
-  p1.push(10);
-  p1.push(11);
-  std::cout <<"p1 has size " << p1.size() << "; p1 = " << p1 << ";\n";
-  while (!p1.empty()) {
-    std::cout << p1.front() << "\n";
+  for (int i = 0; i < n; i++) {
+    p1.push(i);
+  }
+  REQUIRE(p1.size() == n);
+}
+
+TEST_CASE("testing pop method.")
+{
+  int n = 100;
+  int m = 4;
+  Queue<int> p1;
+  for (int j = 0; j < m; j++) {
+    for (int i = 0; i < n; i++) {
+      p1.push(i);
+    }
+    REQUIRE(p1.size() == n);
+    for (int i = 0; i < n; i++) {
+      p1.pop();
+    }
+    REQUIRE(p1.empty());
+  }
+}
+
+TEST_CASE("Testing front method")
+{
+  int n = 100;
+  Queue<int> p1;
+  for (int i = 0; i < n; i++) {
+    p1.push(i);
+  }
+  for (int i = 0; i < n; i++) {
+    REQUIRE(p1.front() == i);
     p1.pop();
   }
 }

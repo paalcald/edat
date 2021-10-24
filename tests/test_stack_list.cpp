@@ -1,22 +1,59 @@
+#define CATCH_CONFIG_MAIN 
+
 #include <iostream>
 #include "stack_list.hpp"
+#include "catch.hpp"
+
 
 using namespace pab;
-
-int main()
+TEST_CASE(" ")
 {
+std::cout << "Testing linked list based Stack implementation\n";
+}
+TEST_CASE("Testing empty stack instantiation")
+{
+  Stack<int> s;
+  REQUIRE(s.empty());
+}
+
+TEST_CASE("Testing push method")
+{
+  int n = 100;
   Stack<int> p1;
-  p1.push(4);
-  p1.push(5);
-  p1.push(6);
-  p1.pop();
-  p1.push(7);
-  p1.push(8);
-  p1.push(10);
-  p1.push(11);
-  std::cout <<"p1 has size " << p1.size() << "; p1 = " << p1 << ";\n";
-  while (!p1.empty()) {
-    std::cout << p1.top() << "\n";
+  for (int i = 1; i < n; i++) {
+    p1.push(i);
+    REQUIRE(p1.top() == i);
+  }
+  REQUIRE(p1.size() == n - 1);
+}
+
+TEST_CASE("Testing pop method")
+{
+  int n = 100;
+  int m = 4;
+  Stack<int> p1;
+  for (int j = 0; j < m; j++) {
+    for (int i = 0; i < n; i++) {
+      p1.push(i);
+    }
+    REQUIRE(p1.size() == n);
+    for (int i = 0; i < n; i++) {
+      p1.pop();
+    }
+    REQUIRE(p1.empty());
+  }
+}
+
+TEST_CASE("Testing top method")
+{
+  int n = 100;
+  Stack<int> p1;
+  for (int i = 0; i < n; i++) {
+    p1.push(i);
+    REQUIRE(p1.top() == i);
+  }
+  for (int i = n - 1; i >= 0; i--) {
+    REQUIRE(p1.top() == i);
     p1.pop();
   }
 }

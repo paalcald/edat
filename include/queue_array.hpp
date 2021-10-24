@@ -28,7 +28,7 @@ namespace pab {
     void empty_queue(void);
     void push(const T& e);
     void pop(void);
-    T& top(void) const;
+    T& front(void) const;
     bool empty(void) const;
     bool full(void) const;
     int size(void) const;
@@ -96,10 +96,10 @@ void pab::Queue<T>::pop(void)
 }
 
 template <typename T>
-T& pab::Queue<T>::top(void) const
+T& pab::Queue<T>::front(void) const
 {
   if (empty())
-    throw std::invalid_argument("top() is undefined for an empty queue.");
+    throw std::invalid_argument("front() is undefined for an empty queue.");
 
   return _queue[_top];
 }
