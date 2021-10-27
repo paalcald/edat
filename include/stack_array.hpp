@@ -1,5 +1,5 @@
 #ifndef STACK_H
-#define STACK_H
+#define STACK_H "Array Implementation"
 
 #include <iostream>
 #include <stdexcept>

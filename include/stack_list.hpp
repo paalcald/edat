@@ -1,5 +1,5 @@
 #ifndef STACK_H
-#define STACK_H
+#define STACK_H "List Implementation"
 
 #include <iostream>
 #include <stdexcept>

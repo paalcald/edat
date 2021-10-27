@@ -5,18 +5,19 @@ INCDIR=include
 TESTDIR=tests
 TESTBINDIR=tests/bin
 
-ADTS=$(wildcard $(INCDIR)/*.hpp)
+INCS=$(wildcard $(INCDIR)/*.hpp)
+ADTS=$(filter-out $(INCDIR)/catch.hpp $(INCDIR)/pila.hpp, $(INCS))
 TESTS=$(wildcard $(TESTDIR)/test_*.cpp)
-TESTBINS=$(patsubst $(TESTDIR)/%.cpp, $(TESTBINDIR)/%, $(TESTS))
+TESTBINS=$(patsubst $(INCDIR)/%.hpp, $(TESTBINDIR)/test_%, $(ADTS))
 
 all: tests
 
 tests: $(TESTBINS)
-	for test in $(TESTBINS) ; do ./$$test ; done 
+	for test in $(TESTBINS) ; do ./$$test ; done
 
-$(TESTBINDIR)/test_%: $(TESTDIR)/test_%.cpp $(INCDIR)/%.hpp
-	$(CPP) $(CPPFLAGS) -o $@ $<
-
+.SECONDEXPANSION:
+$(TESTBINDIR)/test_%: $(TESTDIR)/test_$$(word 1, $$(subst _, ,$$*)).cpp
+	$(CPP) $(CPPFLAGS) -include $*.hpp -o $@ $(TESTDIR)/test_$(word 1,$(subst _, ,$*)).cpp
 
 clean:
 	rm -r $(TESTBINS)
