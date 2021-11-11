@@ -176,4 +176,14 @@ void mover_sig_tras(Nodo_sec<T>& a, Nodo_sec<T>& b)
   tmp->sig = b.sig;
   b.sig = tmp;
 }
-
+template <typename T> 
+void ordenar(Secuencia<T> s)
+{
+  Nodo_sec<par_int>* ultimo_menor = s.primero;
+     while(!fin(s)) {
+      avanzar(s);
+    }
+    Nodo_sec<par_int>* ultimo_mayor = s.anterior;
+    reiniciar(s);
+    quicksort(s, ultimo_menor, ultimo_mayor);
+}
