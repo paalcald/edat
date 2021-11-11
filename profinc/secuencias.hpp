@@ -116,7 +116,7 @@ void mostrar(Secuencia<T> s){
 template <typename T>
 void quicksort(Secuencia<T> s, Nodo_sec<T>* primero, Nodo_sec<T>* ultimo)
 {
-  if (primero == ultimo) {
+  if (primero == ultimo || s.primero == ultimo) {
   } else {
     T pivote = ultimo->dato;
     Nodo_sec<T>* ultimo_menor = primero;
