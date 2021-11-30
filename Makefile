@@ -1,34 +1,48 @@
-CPP=g++
-CPPFLAGS=-g -Wall 
+CXX := g++
+CXXFLAGS := -g -Wall
 
-INCDIR=include
-TESTDIR=tests
-TESTBINDIR=tests/bin
+INC_DIR := include
+TEST_DIR := tests
+TEST_BIN_DIR := $(TEST_DIR)/bin
+
 BINDIR=bin
-PROFDIR=prof
-PROFINC=profinc
 
-INCS=$(wildcard $(INCDIR)/*.hpp)
-ADTS=$(filter-out $(INCDIR)/catch.hpp $(INCDIR)/pila.hpp, $(INCS))
-TESTS=$(wildcard $(TESTDIR)/test_*.cpp)
-TESTBINS=$(patsubst $(INCDIR)/%.hpp, $(TESTBINDIR)/test_%, $(ADTS))
+ADTS = stack_array stack_list queue_array queue_list secuencias #binary_search_tree
+TESTS = $(addprefix test_, $(ADTS))
 
-all: prof
+INC_FLAGS := $(addprefix -I,$(INC_DIR))
 
-prof: run_secuencias
+CPPFLAGS := $(INC_FLAGS)
 
-run_secuencias: $(BINDIR)/secuencias
-	./$(BINDIR)/secuencias
+all:
+	@echo "No programs are implemented yet"
 
-$(BINDIR)/secuencias: $(PROFDIR)/secuencias.cpp $(PROFINC)/secuencias.hpp
-	$(CPP) $(CPPFLAGS) -I$(PROFINC) -o $@ $<
+.PHONY: check
+check: $(TEST_BIN_DIR)/ $(TESTS)
+	@echo "Cleaning up after tests"
+	@rm -r $(TEST_BIN_DIR)
 
-tests: $(TESTBINS)
-	for test in $(TESTBINS) ; do ./$$test ; done
+test_%: $(TEST_BIN_DIR)/test_% | $(TEST_BIN_DIR)/
+	@./$<
 
-.SECONDEXPANSION:
-$(TESTBINDIR)/test_%: $(TESTDIR)/test_$$(word 1, $$(subst _, ,$$*)).cpp
-	$(CPP) $(CPPFLAGS) -I$(INCDIR) -include $*.hpp -o $@ $(TESTDIR)/test_$(word 1,$(subst _, ,$*)).cpp
+$(TEST_BIN_DIR)/:
+	@echo "Creating" $@
+	@mkdir -p $@
 
+$(TEST_BIN_DIR)/test_%_array: $(TEST_DIR)/test_%.cpp $(INC_DIR)/%_array.hpp
+	@echo "Compiling tests for" $@
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) -include $(word 2,$^) -o $@ $<
+	@echo "done."
+
+$(TEST_BIN_DIR)/test_%_list: $(TEST_DIR)/test_%.cpp $(INC_DIR)/%_list.hpp
+	@echo "Compiling tests for" $@
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) -include $(word 2,$^) -o $@ $<
+
+$(TEST_BIN_DIR)/test_%: $(TEST_DIR)/test_%.cpp $(INC_DIR)/%.hpp
+	@echo "Compiling tests for" $@
+	@$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
+	@echo "done."
+
+.PHONY: clean
 clean:
-	rm -r $(TESTBINS)
+	rm -r $(TEST_BIN_DIR)
